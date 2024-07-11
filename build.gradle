@@ -84,7 +84,7 @@ dependencies {
 	modImplementation "com.kotori316:scalable-cats-force-fabric:3.0.0:dev"
 	
 	// Fabric API.
-//	modImplementation "net.fabricmc.fabric-api:fabric-api:${predef_lib_fabric_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${predef_lib_fabric_version}"
 	// Telegram Bot API
 	implementation "com.github.pengrad:java-telegram-bot-api:7.7.0"
 	
