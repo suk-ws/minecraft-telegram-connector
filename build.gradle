@@ -1,0 +1,149 @@
+import java.util.Optional as If
+
+plugins {
+	id 'fabric-loom' version '1.6-SNAPSHOT'
+	id 'scala'
+	id 'maven-publish'
+	id 'com.github.gmazzo.buildconfig' version '5.3.5'
+}
+
+static Closure mavenRepository (@DelegatesTo(MavenArtifactRepository.class) Closure closure) { closure }
+static Action<? extends PasswordCredentials> credentials (Action<? extends PasswordCredentials> action) { action }
+
+If<Action<? extends PasswordCredentials>> workshopCredentials = If.empty()
+final predef_credential_username = System.getenv('workshop_maven_credential_username')
+final predef_credential_password = System.getenv('workshop_maven_credential_password')
+if (predef_credential_username != null && predef_credential_password != null) {
+	workshopCredentials = If.of(credentials { credentials ->
+		credentials.username = predef_credential_username
+		credentials.password = predef_credential_password
+	})
+	println("Using workshop credentials.")
+} else {
+	println("Workshop credentials not set, will not be able to do maven publish.")
+}
+
+final var workshopMcModsPublishable = workshopCredentials.isPresent()
+final var workshopMcMods = mavenRepository({
+	name 'wsMcMods'
+	url "https://mvn.sukazyo.cc/mc-mods"
+	if (workshopMcModsPublishable)
+		credentials workshopCredentials.get()
+})
+
+final var proj_group = predef_proj_group
+final var proj_package = "$predef_proj_group.$predef_proj_id"
+final var proj_is_snapshot = Boolean.parseBoolean(predef_proj_is_snapshot)
+final var proj_version = [
+		predef_proj_version,
+		proj_is_snapshot ? "SNAPSHOT" : null
+].stream().filter(x -> x != null && !x.isBlank()).reduce((x, y) -> x + '-' + y).orElseGet(() -> "0.0.0-SNAPSHOT")
+final var proj_name = predef_proj_name
+
+version = proj_version
+group = proj_group
+
+base {
+	archivesName = proj_name
+}
+
+repositories {
+	maven workshopMcMods
+	maven {
+		name = "Azure Kotori316 Cats"
+		url = "https://pkgs.dev.azure.com/Kotori316/minecraft/_packaging/mods/maven/v1"
+	}
+}
+
+loom {
+	splitEnvironmentSourceSets()
+	mods {
+		"$proj_name" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+}
+
+remapJar {
+	remapperIsolation = true
+}
+
+dependencies {
+	
+	// To change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${predef_api_minecraft_version}"
+	mappings "net.fabricmc:yarn:${predef_api_yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${predef_api_loader_version}"
+	
+	// for Scala
+	implementation "org.scala-lang:scala-library:2.13.11"
+	// If you need scala3
+	implementation "org.scala-lang:scala3-library_3:3.3.0"
+	// If you write entrypoint in Scala. If entrypoint is Java, you can use default(fabric) entrypoint loader.
+	modImplementation "com.kotori316:scalable-cats-force-fabric:3.0.0:dev"
+	
+	// Fabric API.
+//	modImplementation "net.fabricmc.fabric-api:fabric-api:${predef_lib_fabric_version}"
+	// Telegram Bot API
+	implementation "com.github.pengrad:java-telegram-bot-api:7.7.0"
+	
+}
+
+buildConfig {
+	
+	packageName proj_package
+	
+	buildConfigField(String, 'MOD_VERSION', proj_version)
+	
+}
+
+processResources {
+	
+	inputs.property "version", proj_version
+	
+	filesMatching("fabric.mod.json") {
+		expand "version": proj_version
+	}
+	
+	filesMatching("*.properties") {
+		expand "version": proj_version
+	}
+	
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 21
+}
+
+java {
+	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+	// if it is present.
+	// If you remove this line, sources will not be generated.
+	withSourcesJar()
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${proj_name}"}
+	}
+}
+
+// configure the maven publication
+publishing {
+	
+	publications {
+		create("mavenJava", MavenPublication) {
+			artifactId = proj_name
+			from components.java
+		}
+	}
+	
+	repositories {
+		if (workshopMcModsPublishable)
+			maven workshopMcMods
+	}
+	
+}

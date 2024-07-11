@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "minecraft_telegram_connector",
+	"version": "${version}",
+	"name": "Minecraft Telegram Connector",
+	"description": "TODO",
+	"authors": [
+		"A.C.Sukazyo Eyre"
+	],
+	"contact": {
+		"homepage": "TODO",
+		"sources": "TODO"
+	},
+	"license": "Apache 2.0",
+	"icon": "assets/minecraft_telegram/icon.png",
+	"environment": "*",
+	"custom": {
+		"modmenu": {
+			"update_checker": true
+		}
+	},
+	"entrypoints": {
+		"main": [
+			{
+				"adapter": "kotori_scala",
+				"value": "cc.sukazyo.minecraft_telegram.ModMinecraftTelegram"
+			}
+		]
+	},
+	"mixins": [
+		"minecraft_telegram_connector.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.10",
+		"minecraft": "~1.20",
+		"java": ">=21",
+		"kotori_scala": ">=1.0.0"
+	},
+	"suggests": {
+	}
+}
