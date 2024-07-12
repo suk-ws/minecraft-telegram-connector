@@ -1,0 +1,22 @@
+
+bot:
+  
+  # This sections defines which Telegram Bot API Server should be use.
+  # You can just use the Telegram official one by do not set this field.
+  #api_server:
+  #  # Bot API URL, Required
+  #  api_url: "https://api.telegram.org/bot"
+  #  # Bot File API URL, Required
+  #  file_api_url: "https://api.telegram.org/file/bot"
+  #  # If to use the Telegram's test backend, default is false
+  #  use_test_server: false
+  
+  # Bot Token, Required
+  # Use to log in to your bot.
+  token: "10009876:AodhfWAOIEDDJHPIwahdoifAUVWoipUVPRE"
+  # Bot Username, Optional
+  # If set the bot username here, then when login to the bot, the username will be checked if
+  # is the same with the value here. If the logged in bot is not with the same name, then the
+  # login will fails.
+  #username: "my_random_bot"
+  

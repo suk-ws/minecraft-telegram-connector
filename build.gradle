@@ -30,6 +30,14 @@ final var workshopMcMods = mavenRepository({
 	if (workshopMcModsPublishable)
 		credentials workshopCredentials.get()
 })
+final var workshopReleases = mavenRepository({
+	name 'wsMcMods'
+	url "https://mvn.sukazyo.cc/releases"
+})
+final var workshopSnapshots = mavenRepository({
+	name 'wsMcMods'
+	url "https://mvn.sukazyo.cc/snapshots"
+})
 
 final var proj_group = predef_proj_group
 final var proj_package = "$predef_proj_group.$predef_proj_id"
@@ -49,6 +57,8 @@ base {
 
 repositories {
 	maven workshopMcMods
+	maven workshopReleases
+	maven workshopSnapshots
 	maven {
 		name = "Azure Kotori316 Cats"
 		url = "https://pkgs.dev.azure.com/Kotori316/minecraft/_packaging/mods/maven/v1"
@@ -77,11 +87,17 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${predef_api_loader_version}"
 	
 	// for Scala
-	implementation "org.scala-lang:scala-library:2.13.11"
+	implementation 'org.scala-lang:scala-library:2.13.14'
 	// If you need scala3
-	implementation "org.scala-lang:scala3-library_3:3.3.0"
+	implementation 'org.scala-lang:scala3-library_3:3.4.2'
 	// If you write entrypoint in Scala. If entrypoint is Java, you can use default(fabric) entrypoint loader.
 	modImplementation "com.kotori316:scalable-cats-force-fabric:3.0.0:dev"
+	
+	implementation include("cc.sukazyo:morny-system-lib:2.0.0-alpha20-SNAPSHOT")
+	implementation include("io.circe:circe-core_3:0.14.9")
+	implementation include("io.circe:circe-generic_3:0.14.9")
+	implementation include("io.circe:circe-parser_3:0.14.9")
+	implementation include("io.circe:circe-yaml-v12_3:0.15.3")
 	
 	// Fabric API.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${predef_lib_fabric_version}"

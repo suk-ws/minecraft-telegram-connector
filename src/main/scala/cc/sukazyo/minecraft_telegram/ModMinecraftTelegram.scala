@@ -1,11 +1,13 @@
 package cc.sukazyo.minecraft_telegram
 
 import cc.sukazyo.minecraft_telegram.bot.{Bot, BotConfig}
+import cc.sukazyo.minecraft_telegram.config.{Config, ConfigManager}
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
-import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.server.MinecraftServer
 import org.apache.logging.log4j.{Logger, LogManager}
+import cc.sukazyo.minecraft_telegram.utils.Log4jExtension.*
+import cc.sukazyo.restools.ResourcePackage
 
 object ModMinecraftTelegram extends ModInitializer {
 	
@@ -13,10 +15,12 @@ object ModMinecraftTelegram extends ModInitializer {
 	val NAME = "Minecraft Telegram Connector"
 	val VERSION: String = BuildConfig.MOD_VERSION
 	
-	val logger: Logger = LogManager.getLogger(NAME)
+	given logger: Logger = LogManager.getLogger(NAME)
+	val resources: ResourcePackage = ResourcePackage.get("minecraft_telegram_connector.mixins.json")
 	var SERVER: MinecraftServer = _
 	
 	var bot: Bot = _
+	var config: Config = _
 	
 	object ServerStartingCallback extends ServerLifecycleEvents.ServerStarting {
 		override def onServerStarting(server: net.minecraft.server.MinecraftServer): Unit = {
@@ -28,21 +32,18 @@ object ModMinecraftTelegram extends ModInitializer {
 				return;
 			
 			try {
-				bot = Bot(BotConfig(
-					// TODO: Bot Config
-					api_server = None,
-					username = None,
-					token = ""
-				))(using logger)
+				bot = Bot(config.bot)
 			} catch case e: BotConfig.LoginFailedException =>
 				logger error "Failed to login to the Telegram Bot !"
-				logger error e
+				logger errorExceptionSimple e
 				logger warn s"$NAME will NOT WORKS!!!"
 			
 		}
 	}
 	
 	override def onInitialize (): Unit = {
+		
+		this.config = ConfigManager.read[Config]("config")
 		
 		ServerLifecycleEvents.SERVER_STARTING register this.ServerStartingCallback
 		
