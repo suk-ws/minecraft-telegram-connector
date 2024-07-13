@@ -11,6 +11,16 @@ bot:
   #  # If to use the Telegram's test backend, default is false
   #  use_test_server: false
   
+  # Set the proxy for connecting to the Telegram Bot API Server. Optional
+  #proxy:
+  #  # Proxy type, Required
+  #  # Can only be http or socks5.
+  #  type: http
+  #  # Proxy server hostname, Required
+  #  host: "127.0.0.1"
+  #  # Proxy server port, Required
+  #  port: 8080
+  
   # Bot Token, Required
   # Use to log in to your bot.
   token: "10009876:AodhfWAOIEDDJHPIwahdoifAUVWoipUVPRE"
@@ -19,4 +29,11 @@ bot:
   # is the same with the value here. If the logged in bot is not with the same name, then the
   # login will fails.
   #username: "my_random_bot"
+  
+
+telegram:
+  
+  # Configure where the server message will be synced to. Required.
+  # Required to be a group chat id in Bot API format (with -100 prefix).
+  chat_id: -100123456789
   

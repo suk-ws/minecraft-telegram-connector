@@ -3,18 +3,22 @@ package cc.sukazyo.minecraft_telegram.bot
 import cc.sukazyo.cono.morny.system.telegram_api.event.EventRuntimeException
 import cc.sukazyo.cono.morny.system.telegram_api.TelegramExtensions.Requests.unsafeExecute
 import cc.sukazyo.minecraft_telegram.bot.BotConfig.{IncorrectBotAccountException, LoginFailedException}
+import cc.sukazyo.minecraft_telegram.config.ProxyConfig
 import cc.sukazyo.minecraft_telegram.utils.Log4jExtension.LoggerExt
 import com.pengrad.telegrambot.TelegramBot
+import com.pengrad.telegrambot.model.User
 import com.pengrad.telegrambot.request.GetMe
+import com.pengrad.telegrambot.response.GetMeResponse
+import okhttp3.OkHttpClient
 import org.apache.logging.log4j.Logger
 
 import scala.util.boundary
-import com.pengrad.telegrambot.model.User
-import com.pengrad.telegrambot.response.GetMeResponse
 
 case class BotConfig (
 	
 	api_server: Option[BotApiServer],
+	
+	proxy: Option[ProxyConfig],
 	
 	username: Option[String],
 	token: String,
@@ -24,6 +28,7 @@ case class BotConfig (
 	def getBot: TelegramBot = {
 		
 		val builder = TelegramBot.Builder(this.token)
+		val okHttpClientBuilder = OkHttpClient.Builder()
 		
 		this.api_server match
 			case Some(api_server) =>
@@ -32,6 +37,12 @@ case class BotConfig (
 				builder.useTestServer(api_server.use_test_server)
 			case None =>
 		
+		this.proxy match
+			case None =>
+			case Some(proxy) =>
+				okHttpClientBuilder.proxy(proxy.getProxy)
+		
+		builder.okHttpClient(okHttpClientBuilder.build())
 		builder.build
 		
 	}
