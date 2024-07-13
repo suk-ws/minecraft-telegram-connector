@@ -94,6 +94,7 @@ dependencies {
 	modImplementation "com.kotori316:scalable-cats-force-fabric:3.0.0:dev"
 	
 	implementation include("cc.sukazyo:morny-system-lib:2.0.0-alpha20-SNAPSHOT")
+	implementation include("cc.sukazyo:da4a:0.1.0-SNAPSHOT")
 	implementation include("io.circe:circe-core_3:0.14.9")
 	implementation include("io.circe:circe-generic_3:0.14.9")
 	implementation include("io.circe:circe-parser_3:0.14.9")

@@ -2,12 +2,12 @@ package cc.sukazyo.minecraft_telegram
 
 import cc.sukazyo.minecraft_telegram.bot.{Bot, BotConfig}
 import cc.sukazyo.minecraft_telegram.config.{Config, ConfigManager}
+import cc.sukazyo.minecraft_telegram.utils.Log4jExtension.*
+import cc.sukazyo.restools.ResourcePackage
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.minecraft.server.MinecraftServer
 import org.apache.logging.log4j.{Logger, LogManager}
-import cc.sukazyo.minecraft_telegram.utils.Log4jExtension.*
-import cc.sukazyo.restools.ResourcePackage
 
 object ModMinecraftTelegram extends ModInitializer {
 	
@@ -34,7 +34,7 @@ object ModMinecraftTelegram extends ModInitializer {
 			try {
 				bot = Bot(config.bot)
 			} catch case e: BotConfig.LoginFailedException =>
-				logger error "Failed to login to the Telegram Bot !"
+				logger error "Failed to initialize to the Telegram Bot !"
 				logger errorExceptionSimple e
 				logger warn s"$NAME will NOT WORKS!!!"
 			
