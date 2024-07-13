@@ -7,19 +7,21 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.minecraft.server.MinecraftServer
 import cc.sukazyo.cono.morny.system.telegram_api.TelegramExtensions.Requests.unsafeExecute
 import cc.sukazyo.minecraft_telegram.utils.MinecraftServerExtension.MinecraftServerExt
+import org.apache.logging.log4j.Logger
 
-class MinecraftServerLifecycleListener (using bot: Bot) extends BotExt {
+class MinecraftServerLifecycleListener (using bot: Bot)(using logger: Logger) extends BotExt {
 	import bot.dsl.given
 	
 	object ServerStarted extends ServerLifecycleEvents.ServerStarted {
 		override def onServerStarted(server: MinecraftServer): Unit = {
 			SendMessage(
 				minecraftLinkedChat,
-				s"""<b>▌Serve Event</b>
+				s"""<b>▌🗄Server Status</b>
 				   |
 				   |🟢 ${server.getServerName} Server Started!""".stripMargin
 			).parseMode(ParseMode.HTML)
 				.unsafeExecute
+			logger debug "synced server started state to telegram"
 		}
 	}
 	
@@ -27,12 +29,12 @@ class MinecraftServerLifecycleListener (using bot: Bot) extends BotExt {
 		override def onServerStopped(server: MinecraftServer): Unit = {
 			SendMessage(
 				minecraftLinkedChat,
-				s"""<b>▌Serve Event</b>
+				s"""<b>▌🗄Server Status</b>
 				   |
 				   |🔴 ${server.getServerName} Server Stopped!""".stripMargin
 			).parseMode(ParseMode.HTML)
 				.unsafeExecute
-			bot.shutdown()
+			logger debug "synced server stopped state to telegram"
 		}
 	}
 	

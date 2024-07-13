@@ -1,7 +1,7 @@
 package cc.sukazyo.minecraft_telegram.bot
 
 import cc.sukazyo.minecraft_telegram.bot.events.OnMinecraftCommandExecute
-import cc.sukazyo.minecraft_telegram.bot.internal.UpdateManager
+import cc.sukazyo.minecraft_telegram.bot.internal.{ActionRunner, UpdateManager}
 import cc.sukazyo.minecraft_telegram.bot.minecraft.{MinecraftChatMessageListener, MinecraftGameMessageListener, MinecraftServerLifecycleListener}
 import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.model.User
@@ -20,6 +20,8 @@ class Bot (config: BotConfig)(using logger: Logger) {
 	
 	val eventManager: UpdateManager = UpdateManager()
 	
+	private object actionRunner extends ActionRunner
+	
 	logger info s"Logged in to bot successfully : bot @${bot_user.username}[${bot_user.id}]"
 	
 	ServerMessageEvents.CHAT_MESSAGE register MinecraftChatMessageListener()
@@ -30,11 +32,21 @@ class Bot (config: BotConfig)(using logger: Logger) {
 	
 	eventManager += OnMinecraftCommandExecute()
 	
-	account.setUpdatesListener(eventManager, eventManager.OnGetUpdateFailed)
+	this.start()
+	
+	def start (): Unit = {
+		account.setUpdatesListener(eventManager, eventManager.OnGetUpdateFailed)
+		actionRunner.start()
+	}
 	
 	def shutdown (): Unit = {
 		account.removeGetUpdatesListener()
-		account.shutdown()
+		actionRunner.setDisabled()
+		logger info "Stopped Telegram bot"
+	}
+	
+	def runs (func: ActionRunner.Action): Unit = {
+		actionRunner.runs(func)
 	}
 	
 	object dsl {

@@ -22,7 +22,7 @@ object ModMinecraftTelegram extends ModInitializer {
 	var bot: Bot = _
 	var config: Config = _
 	
-	object ServerStartingCallback extends ServerLifecycleEvents.ServerStarting {
+	private object ServerStartingCallback extends ServerLifecycleEvents.ServerStarting {
 		override def onServerStarting(server: net.minecraft.server.MinecraftServer): Unit = {
 			
 			ModMinecraftTelegram.SERVER = server
@@ -41,11 +41,19 @@ object ModMinecraftTelegram extends ModInitializer {
 		}
 	}
 	
+	private object ServerStoppingCallback extends ServerLifecycleEvents.ServerStopping {
+		override def onServerStopping(server: net.minecraft.server.MinecraftServer): Unit = {
+			if bot != null then
+				bot.shutdown()
+		}
+	}
+	
 	override def onInitialize (): Unit = {
 		
 		this.config = ConfigManager.read[Config]("config")
 		
 		ServerLifecycleEvents.SERVER_STARTING register this.ServerStartingCallback
+		ServerLifecycleEvents.SERVER_STOPPING register this.ServerStoppingCallback
 		
 	}
 	
