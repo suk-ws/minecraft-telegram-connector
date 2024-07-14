@@ -16,7 +16,7 @@ class MinecraftServerLifecycleListener (using bot: Bot)(using logger: Logger) ex
 		override def onServerStarted(server: MinecraftServer): Unit = {
 			SendMessage(
 				minecraftLinkedChat,
-				s"""<b>▌🗄Server Status</b>
+				s"""<b>${Prefixes.SERVER_IDENTITY}🗄Server Status</b>
 				   |
 				   |🟢 ${server.getServerName} Server Started!""".stripMargin
 			).parseMode(ParseMode.HTML)
@@ -29,7 +29,7 @@ class MinecraftServerLifecycleListener (using bot: Bot)(using logger: Logger) ex
 		override def onServerStopped(server: MinecraftServer): Unit = {
 			SendMessage(
 				minecraftLinkedChat,
-				s"""<b>▌🗄Server Status</b>
+				s"""<b>${Prefixes.SERVER_IDENTITY}🗄Server Status</b>
 				   |
 				   |🔴 ${server.getServerName} Server Stopped!""".stripMargin
 			).parseMode(ParseMode.HTML)

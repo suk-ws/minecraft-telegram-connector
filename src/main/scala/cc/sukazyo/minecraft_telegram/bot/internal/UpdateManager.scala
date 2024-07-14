@@ -102,7 +102,6 @@ class UpdateManager extends UpdatesListener {
 		
 		override def onException (e: TelegramException): Unit = {
 			
-			
 			// This function intended to catch exceptions on update
 			//   fetching controlled by Telegram API Client. So that
 			//   it won't be directly printed to STDOUT without Morny's

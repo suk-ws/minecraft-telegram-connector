@@ -9,8 +9,9 @@ import cc.sukazyo.minecraft_telegram.ModMinecraftTelegram
 import com.pengrad.telegrambot.model.ChatMember
 import com.pengrad.telegrambot.request.SendMessage
 import net.minecraft.text.Text
+import org.apache.logging.log4j.Logger
 
-class OnMinecraftCommandExecute (using bot: Bot) extends EventListener with BotExt {
+class OnMinecraftCommandExecute (using bot: Bot)(using logger: Logger) extends EventListener with BotExt {
 	import bot.dsl.given
 	
 	override def onMessage (using event: EventEnv): Unit = {
@@ -27,9 +28,9 @@ class OnMinecraftCommandExecute (using bot: Bot) extends EventListener with BotE
 			return;
 		
 		val mcCmd = ModMinecraftTelegram.SERVER.getCommandManager
-		val mcServerConsole = ModMinecraftTelegram.SERVER.getCommandSource
+		val mcServerConsole = getBotServerConsole
 		val command_text = message.text.drop("//".length)
-		mcServerConsole.sendMessage(Text.literal(s"Executing command by Telegram ${message.from.toLogTag}: /$command_text"))
+		mcServerConsole.sendMessage(Text.literal(s"Executing admin command by Telegram ${message.from.toLogTag}: /$command_text"))
 		mcCmd.executeWithPrefix(mcServerConsole, command_text)
 		
 	}

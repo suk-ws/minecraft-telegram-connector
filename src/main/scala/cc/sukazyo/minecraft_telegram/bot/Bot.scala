@@ -2,7 +2,7 @@ package cc.sukazyo.minecraft_telegram.bot
 
 import cc.sukazyo.minecraft_telegram.bot.events.OnMinecraftCommandExecute
 import cc.sukazyo.minecraft_telegram.bot.internal.{ActionRunner, UpdateManager}
-import cc.sukazyo.minecraft_telegram.bot.minecraft.{MinecraftChatMessageListener, MinecraftGameMessageListener, MinecraftServerLifecycleListener}
+import cc.sukazyo.minecraft_telegram.bot.minecraft.{MinecraftChatMessageListener, MinecraftCommandMessageListener, MinecraftGameMessageListener, MinecraftServerLifecycleListener}
 import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.model.User
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
@@ -26,6 +26,7 @@ class Bot (config: BotConfig)(using logger: Logger) {
 	
 	ServerMessageEvents.CHAT_MESSAGE register MinecraftChatMessageListener()
 	ServerMessageEvents.GAME_MESSAGE register MinecraftGameMessageListener()
+	ServerMessageEvents.COMMAND_MESSAGE register MinecraftCommandMessageListener()
 	for (i <- MinecraftServerLifecycleListener() :: Nil)
 		ServerLifecycleEvents.SERVER_STARTED register i.ServerStarted
 		ServerLifecycleEvents.SERVER_STOPPED register i.ServerStopped

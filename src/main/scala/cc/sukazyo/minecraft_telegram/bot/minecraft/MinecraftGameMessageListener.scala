@@ -17,7 +17,7 @@ class MinecraftGameMessageListener (using bot: Bot)(using logger: Logger) extend
 			
 			SendMessage(
 				minecraftLinkedChat,
-				s"""▌ ${message.getString}"""
+				s"""${Prefixes.SERVER_MESSAGE}${message.getString}"""
 			).entities(MessageEntity(MessageEntity.Type.bold, 0, 1))
 				.unsafeExecute
 			logger debug "synced game message to telegram"

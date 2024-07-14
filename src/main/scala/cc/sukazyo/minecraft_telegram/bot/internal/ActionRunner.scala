@@ -15,9 +15,10 @@ class ActionRunner (val actionPool: mutable.Queue[Action] = mutable.Queue.empty)
 extends Thread(s"${ModMinecraftTelegram.NAME}/ActionRunner") {
 	
 	private var disabled = false
+	private var executing = false
 	def setDisabled(): Unit = disabled = true
 	
-	def call(): Unit = this.interrupt()
+	def call(): Unit = if !executing then this.interrupt()
 	
 	def runs (func: Action): Unit =
 		this.actionPool.enqueue(func)
@@ -27,10 +28,12 @@ extends Thread(s"${ModMinecraftTelegram.NAME}/ActionRunner") {
 		while (true) {
 			try {
 				val elem = this.actionPool.dequeue()
+				executing = true
 				try elem.apply()
 				catch case e: Throwable =>
 					logger error "Failed to execute an bot action:"
 					logger errorExceptionSimple e
+				finally executing = false
 			} catch case e: NoSuchElementException => ()
 			if this.actionPool.isEmpty then
 				if disabled then
