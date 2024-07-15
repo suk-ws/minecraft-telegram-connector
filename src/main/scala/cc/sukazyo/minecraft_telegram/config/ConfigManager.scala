@@ -13,8 +13,8 @@ object ConfigManager {
 	
 	private lazy val configRoot: Path = FabricLoader.getInstance()
 		.getConfigDir.resolve(s"${ModMinecraftTelegram.MODID}")
-	private lazy val defaultsRoot: ResourceDirectory = ModMinecraftTelegram.resources
-		.getDirectory("assets", "minecraft_telegram", "config")
+//	private lazy val defaultsRoot: ResourceDirectory = ModMinecraftTelegram.resources
+//		.getDirectory("assets", "minecraft_telegram", "config")
 	
 	def read [ConT] (config: String)(implicit d: Decoder[ConT]): ConT = {
 		
@@ -26,8 +26,10 @@ object ConfigManager {
 		if !parent_file.exists then
 			parent_file.mkdirs
 		if !file.exists then
-			FileOutputStream(file)
-				.write(getDefaultConfig(config).read.readAllBytes)
+			// TODO: there's bugs in resource-tools, disabled temporarily
+			throw new Exception(s"Config file not found: $filePath")
+//			FileOutputStream(file)
+//				.write(getDefaultConfig(config).read.readAllBytes)
 		
 		val fileContent = String(FileInputStream(file).readAllBytes, StandardCharsets.UTF_8)
 		import io.circe.yaml.v12.parser
@@ -42,7 +44,7 @@ object ConfigManager {
 	private def getRealConfig (config: String): Path =
 		configRoot.resolve(s"$config.yaml")
 	
-	private def getDefaultConfig (config: String): ResourceFile =
-		defaultsRoot.getFile(s"$config.yaml")
+//	private def getDefaultConfig (config: String): ResourceFile =
+//		defaultsRoot.getFile(s"$config.yaml")
 	
 }

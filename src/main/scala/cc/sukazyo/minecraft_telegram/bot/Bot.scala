@@ -1,6 +1,6 @@
 package cc.sukazyo.minecraft_telegram.bot
 
-import cc.sukazyo.minecraft_telegram.bot.events.{OnMinecraftCommandExecute, OnTelegram2Minecraft}
+import cc.sukazyo.minecraft_telegram.bot.events.{BotIgnoringOutdatedMessage, OnMinecraftCommandExecute, OnTelegram2Minecraft}
 import cc.sukazyo.minecraft_telegram.bot.internal.{ActionRunner, UpdateManager}
 import cc.sukazyo.minecraft_telegram.bot.minecraft.{MinecraftChatMessageListener, MinecraftCommandMessageListener, MinecraftGameMessageListener, MinecraftServerLifecycleListener}
 import com.pengrad.telegrambot.TelegramBot
@@ -31,10 +31,12 @@ class Bot (config: BotConfig)(using logger: Logger) {
 		ServerLifecycleEvents.SERVER_STARTED register i.ServerStarted
 		ServerLifecycleEvents.SERVER_STOPPED register i.ServerStopped
 	
+	eventManager += BotIgnoringOutdatedMessage()
 	eventManager += OnMinecraftCommandExecute()
 	eventManager += OnTelegram2Minecraft()
 	
 	this.start()
+	val startEpochMillis: Long = System.currentTimeMillis()
 	
 	def start (): Unit = {
 		account.setUpdatesListener(eventManager, eventManager.OnGetUpdateFailed)
