@@ -17,7 +17,7 @@ object ModMinecraftTelegram extends ModInitializer {
 	
 	given logger: Logger = LogManager.getLogger(NAME)
 	// TODO: there's bugs in resource-tools, disabled temporarily
-//	val resources: ResourcePackage = ResourcePackage.get("minecraft_telegram_connector.mixins.json")
+	val resources: ResourcePackage = ResourcePackage.get("minecraft_telegram_connector.mixins.json")
 	var SERVER: MinecraftServer = _
 	
 	var bot: Bot = _

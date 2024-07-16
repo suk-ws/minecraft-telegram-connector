@@ -35,7 +35,8 @@
 		"minecraft": "~1.20",
 		"java": ">=21",
 		"fabric-api": "*",
-		"kotori_scala": ">=1.0.0"
+		"kotori_scala": ">=1.0.0",
+		"fabric-language-kotlin": "*"
 	},
 	"suggests": {
 	}

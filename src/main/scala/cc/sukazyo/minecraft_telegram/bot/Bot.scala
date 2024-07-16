@@ -35,12 +35,13 @@ class Bot (config: BotConfig)(using logger: Logger) {
 	eventManager += OnMinecraftCommandExecute()
 	eventManager += OnTelegram2Minecraft()
 	
-	this.start()
 	val startEpochMillis: Long = System.currentTimeMillis()
+	this.start()
 	
 	def start (): Unit = {
 		account.setUpdatesListener(eventManager, eventManager.OnGetUpdateFailed)
 		actionRunner.start()
+		logger info "Started Telegram Listener"
 	}
 	
 	def shutdown (): Unit = {
