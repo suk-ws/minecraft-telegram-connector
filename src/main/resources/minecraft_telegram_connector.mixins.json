@@ -3,6 +3,7 @@
 	"package": "cc.sukazyo.minecraft_telegram.mixins",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
+		"MixinSendToOps"
 	],
 	"injectors": {
 		"defaultRequire": 1
