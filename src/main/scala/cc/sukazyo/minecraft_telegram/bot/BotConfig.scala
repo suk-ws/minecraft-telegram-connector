@@ -56,14 +56,14 @@ case class BotConfig (
 			
 			for (i <- 1 to 3) {
 				try {
-					logger info s"Trying to login to bot... ($i/3)"
+					logger `info` s"Trying to login to bot... ($i/3)"
 					val aboutMe: GetMeResponse = GetMe().unsafeExecute
-					boundary break Right(aboutMe.user)
+					boundary `break` Right(aboutMe.user)
 				} catch case e: EventRuntimeException =>
-					logger error s"Failed to login to bot:"
-					logger errorExceptionSimple e
-					logger warn "Waiting for next try..."
-					Thread sleep 1000
+					logger `error` s"Failed to login to bot:"
+					logger `errorExceptionSimple` e
+					logger `warn` "Waiting for next try..."
+					Thread `sleep` 1000
 			}
 			
 			Left(LoginFailedException())

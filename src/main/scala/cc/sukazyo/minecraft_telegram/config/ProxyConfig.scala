@@ -1,7 +1,7 @@
 package cc.sukazyo.minecraft_telegram.config
 
 import cc.sukazyo.minecraft_telegram.config.ProxyConfig.ProxyType
-import io.circe.{Codec, Decoder, HCursor, Json}
+import io.circe.{Codec, HCursor, Json}
 import io.circe.generic.semiauto.deriveCodec
 import io.circe.Decoder.Result
 

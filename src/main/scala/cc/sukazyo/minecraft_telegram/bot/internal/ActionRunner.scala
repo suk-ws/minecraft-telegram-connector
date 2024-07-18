@@ -31,13 +31,13 @@ extends Thread(s"${ModMinecraftTelegram.NAME}/ActionRunner") {
 				executing = true
 				try elem.apply()
 				catch case e: Throwable =>
-					logger error "Failed to execute an bot action:"
-					logger errorExceptionSimple e
+					logger `error` "Failed to execute an bot action:"
+					logger `errorExceptionSimple` e
 				finally executing = false
 			} catch case e: NoSuchElementException => ()
 			if this.actionPool.isEmpty then
 				if disabled then
-					logger info s"ActionRunner is disabled with ${this.actionPool.size} remaining tasks"
+					logger `info` s"ActionRunner is disabled with ${this.actionPool.size} remaining tasks"
 					return;
 				try Thread.sleep(Long.MaxValue)
 				catch case e: InterruptedException => ()

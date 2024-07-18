@@ -19,7 +19,7 @@ class OnMinecraftCommandExecute (using bot: Bot)(using logger: Logger) extends E
 		
 		if message.chat.id != minecraftLinkedChat then return;
 		if message.text == null then return;
-		if !(message.text startsWith "//") then return;
+		if !(message.text `startsWith` "//") then return;
 		
 		if !message.chat.memberHasPermission(message.from, ChatMember.Status.administrator) then
 			SendMessage(

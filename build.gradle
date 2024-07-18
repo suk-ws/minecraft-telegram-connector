@@ -91,9 +91,10 @@ dependencies {
 	modImplementation "com.kotori316:scalable-cats-force-fabric:3.0.0:dev"
 	modImplementation "net.fabricmc:fabric-language-kotlin:1.11.0+kotlin.2.0.0"
 	
+	implementation include("com.github.pengrad:java-telegram-bot-api:7.7.0")
 	implementation include("cc.sukazyo:morny-system-lib:2.0.0-alpha20-SNAPSHOT")
-	implementation include("cc.sukazyo:da4a:0.1.0-SNAPSHOT")
-	implementation include("cc.sukazyo:resource-tools:0.3.1-SNAPSHOT")
+	implementation include("cc.sukazyo:da4a:0.2.0-SNAPSHOT")
+	implementation include("cc.sukazyo:resource-tools:0.3.1")
 	implementation include("io.circe:circe-core_3:0.14.9")
 	implementation include("io.circe:circe-generic_3:0.14.9")
 	implementation include("io.circe:circe-parser_3:0.14.9")
@@ -102,7 +103,6 @@ dependencies {
 	runtimeOnly include("cc.sukazyo:messiva:0.2.0")
 	runtimeOnly include("org.jline:jline:3.21.0")
 	runtimeOnly include("org.fusesource.jansi:jansi:2.4.0")
-	runtimeOnly include("com.github.pengrad:java-telegram-bot-api:6.2.0")
 	runtimeOnly include("com.squareup.okhttp3:okhttp:4.12.0")
 	runtimeOnly include("com.squareup.okio:okio:3.6.0")
 	runtimeOnly include("com.squareup.okio:okio-jvm:3.6.0")

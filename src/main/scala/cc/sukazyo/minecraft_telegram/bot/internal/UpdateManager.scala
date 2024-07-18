@@ -3,7 +3,7 @@ package cc.sukazyo.minecraft_telegram.bot.internal
 import cc.sukazyo.cono.morny.system.telegram_api.event.{EventEnv, EventListener, EventRuntimeException}
 import cc.sukazyo.minecraft_telegram.ModMinecraftTelegram.logger
 import cc.sukazyo.minecraft_telegram.utils.Log4jExtension.LoggerExt
-import cc.sukazyo.std.throwable
+import cc.sukazyo.std.throwable.ThrowableExtensions
 import com.google.gson.GsonBuilder
 import com.pengrad.telegrambot.{ExceptionHandler, TelegramException, UpdatesListener}
 import com.pengrad.telegrambot.model.Update
@@ -24,9 +24,9 @@ class UpdateManager extends UpdatesListener {
 		this.register(listener*)
 	
 	private class EventRunner (using update: Update) extends Thread {
-		this setName s"upd-${update.updateId()}-nn"
+		this `setName` s"upd-${update.updateId()}-nn"
 		private def updateThreadName (t: String): Unit =
-			this setName s"upd-${update.updateId()}-$t"
+			this `setName` s"upd-${update.updateId()}-$t"
 		
 		override def run (): Unit = {
 			
@@ -78,15 +78,15 @@ class UpdateManager extends UpdatesListener {
 			} catch case e => {
 				val errorMessage = StringBuilder()
 				errorMessage ++= "Event throws unexpected exception:\n"
-				errorMessage ++= throwable.ThrowableExtensions(e).toLogString
+				errorMessage ++= e.toLogString
 				e match
 					case actionFailed: EventRuntimeException.ActionFailed =>
 						errorMessage ++= "\ntg-api action: response track: "
 						errorMessage ++= (GsonBuilder().setPrettyPrinting().create().toJson(
 							actionFailed.response
-						) indent 4) ++= "\n"
+						) `indent` 4) ++= "\n"
 					case _ =>
-				logger error errorMessage.toString
+				logger `error` errorMessage.toString
 			}
 		}
 		
@@ -112,15 +112,15 @@ class UpdateManager extends UpdatesListener {
 			
 			if (e.response != null) {
 				import com.google.gson.GsonBuilder
-				logger error
+				logger `error`
 					s"""Failed get updates: ${e.getMessage}
 					   |  server responses:
-					   |${GsonBuilder().setPrettyPrinting().create.toJson(e.response) indent 4}
+					   |${GsonBuilder().setPrettyPrinting().create.toJson(e.response) `indent` 4}
 					   |""".stripMargin
 			}
 			
-			logger error "Failed get updates from Telegram Server:"
-			logger errorExceptionSimple e
+			logger `error` "Failed get updates from Telegram Server:"
+			logger `errorExceptionSimple` e
 			
 		}
 		

@@ -9,6 +9,8 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.minecraft.server.MinecraftServer
 import org.apache.logging.log4j.{Logger, LogManager}
 
+import scala.compiletime.uninitialized
+
 object ModMinecraftTelegram extends ModInitializer {
 	
 	val MODID = "minecraft_telegram_connector"
@@ -18,26 +20,26 @@ object ModMinecraftTelegram extends ModInitializer {
 	given logger: Logger = LogManager.getLogger(NAME)
 	// TODO: there's bugs in resource-tools, disabled temporarily
 	val resources: ResourcePackage = ResourcePackage.get("minecraft_telegram_connector.mixins.json")
-	var SERVER: MinecraftServer = _
+	var SERVER: MinecraftServer = uninitialized
 	
-	var bot: Bot = _
-	var config: Config = _
+	var bot: Bot = uninitialized
+	var config: Config = uninitialized
 	
 	private object ServerStartingCallback extends ServerLifecycleEvents.ServerStarting {
 		override def onServerStarting(server: net.minecraft.server.MinecraftServer): Unit = {
 			
 			ModMinecraftTelegram.SERVER = server
 			if !server.isDedicated then
-				logger warn "Server is NOT a dedicated server, will NOT RUN the telegram connector bot!"
-				logger warn s"This mod ($NAME) is ONLY AVAILABLE on a DEDICATED SERVER!!!"
+				logger `warn` "Server is NOT a dedicated server, will NOT RUN the telegram connector bot!"
+				logger `warn` s"This mod ($NAME) is ONLY AVAILABLE on a DEDICATED SERVER!!!"
 				return;
 			
 			try {
 				bot = Bot(config.bot)
 			} catch case e: BotConfig.LoginFailedException =>
-				logger error "Failed to initialize to the Telegram Bot !"
-				logger errorExceptionSimple e
-				logger warn s"$NAME will NOT WORKS!!!"
+				logger `error` "Failed to initialize to the Telegram Bot !"
+				logger `errorExceptionSimple` e
+				logger `warn` s"$NAME will NOT WORKS!!!"
 			
 		}
 	}
@@ -53,8 +55,8 @@ object ModMinecraftTelegram extends ModInitializer {
 		
 		this.config = ConfigManager.read[Config]("config")
 		
-		ServerLifecycleEvents.SERVER_STARTING register this.ServerStartingCallback
-		ServerLifecycleEvents.SERVER_STOPPING register this.ServerStoppingCallback
+		ServerLifecycleEvents.SERVER_STARTING `register` this.ServerStartingCallback
+		ServerLifecycleEvents.SERVER_STOPPING `register` this.ServerStoppingCallback
 		
 	}
 	

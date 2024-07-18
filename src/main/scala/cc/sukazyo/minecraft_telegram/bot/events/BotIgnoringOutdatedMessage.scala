@@ -9,7 +9,7 @@ class BotIgnoringOutdatedMessage (using bot: Bot)(using logger: Logger) extends 
 	override def onMessage (using event: EventEnv): Unit = {
 		
 		if event.update.message.date*1000L < bot.startEpochMillis then
-			logger debug "telegram message is cancelled"
+			logger `debug` "telegram message is cancelled"
 			event.setEventCanceled
 		
 	}

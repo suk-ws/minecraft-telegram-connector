@@ -40,7 +40,7 @@ trait BotExt (using bot: Bot) {
 		override def sendMessage (message: Text): Unit = {
 			
 			val plainMessage = message.getString
-			logger info message.getString
+			logger `info` message.getString
 			
 			bot.runs { () =>
 				SendMessage(

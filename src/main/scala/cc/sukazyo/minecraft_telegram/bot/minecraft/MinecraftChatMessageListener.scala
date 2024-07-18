@@ -15,7 +15,7 @@ class MinecraftChatMessageListener (using bot: Bot)(using logger: Logger) extend
 	override def onChatMessage (message: SignedMessage, sender: ServerPlayerEntity, params: MessageType.Parameters): Unit = {
 		bot.runs { () =>
 			
-			logger debug "received chat message"
+			logger `debug` "received chat message"
 			val senderName = sender.getDisplayName.getString
 			val senderTag = s"<$senderName>"
 			val plainMessage = message.getContent.getString
@@ -25,7 +25,7 @@ class MinecraftChatMessageListener (using bot: Bot)(using logger: Logger) extend
 				s"$senderTag $plainMessage"
 			).entities(MessageEntity(MessageEntity.Type.bold, 0, senderTag.length))
 				.unsafeExecute
-			logger debug "synced chat message"
+			logger `debug` "synced chat message"
 			
 		}
 	}

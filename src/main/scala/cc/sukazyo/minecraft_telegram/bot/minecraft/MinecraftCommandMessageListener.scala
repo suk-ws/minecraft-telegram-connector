@@ -15,7 +15,7 @@ class MinecraftCommandMessageListener (using bot: Bot)(using logger: Logger) ext
 	override def onCommandMessage (message: SignedMessage, source: ServerCommandSource, params: MessageType.Parameters): Unit = {
 		bot.runs { () =>
 			
-			logger debug "received command message"
+			logger `debug` "received command message"
 			val senderName = source.getDisplayName.getString
 			val senderTag = s"[$senderName]"
 			val plainMessage = message.getContent.getString
@@ -25,7 +25,7 @@ class MinecraftCommandMessageListener (using bot: Bot)(using logger: Logger) ext
 				s"$senderTag $plainMessage"
 			).entities(MessageEntity(MessageEntity.Type.bold, 0, senderTag.length))
 				.unsafeExecute
-			logger debug "synced command message"
+			logger `debug` "synced command message"
 			
 		}
 	}

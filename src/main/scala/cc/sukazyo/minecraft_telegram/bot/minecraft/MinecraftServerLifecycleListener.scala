@@ -21,7 +21,7 @@ class MinecraftServerLifecycleListener (using bot: Bot)(using logger: Logger) ex
 				   |🟢 ${server.getServerName} Server Started!""".stripMargin
 			).parseMode(ParseMode.HTML)
 				.unsafeExecute
-			logger debug "synced server started state to telegram"
+			logger `debug` "synced server started state to telegram"
 		}
 	}
 	
@@ -34,7 +34,7 @@ class MinecraftServerLifecycleListener (using bot: Bot)(using logger: Logger) ex
 				   |🔴 ${server.getServerName} Server Stopped!""".stripMargin
 			).parseMode(ParseMode.HTML)
 				.unsafeExecute
-			logger debug "synced server stopped state to telegram"
+			logger `debug` "synced server stopped state to telegram"
 		}
 	}
 	
