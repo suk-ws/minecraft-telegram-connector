@@ -1,8 +1,9 @@
 package cc.sukazyo.minecraft_telegram.bot
 
 import cc.sukazyo.minecraft_telegram.bot.events.{BotIgnoringOutdatedMessage, OnMinecraftCommandExecute, OnTelegram2Minecraft}
-import cc.sukazyo.minecraft_telegram.bot.internal.{ActionRunner, UpdateManager}
+import cc.sukazyo.minecraft_telegram.bot.internal.{ActionRunner, InlineQueryManager, UpdateManager}
 import cc.sukazyo.minecraft_telegram.bot.minecraft.{MinecraftChatMessageListener, MinecraftCommandMessageListener, MinecraftGameMessageListener, MinecraftServerLifecycleListener}
+import cc.sukazyo.minecraft_telegram.bot.queries.ListUsers
 import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.model.User
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
@@ -19,6 +20,7 @@ class Bot (config: BotConfig)(using logger: Logger) {
 	given TelegramBot = account
 	
 	val eventManager: UpdateManager = UpdateManager()
+	val queryManager: InlineQueryManager = InlineQueryManager()
 	
 	private object actionRunner extends ActionRunner
 	
@@ -34,6 +36,9 @@ class Bot (config: BotConfig)(using logger: Logger) {
 	eventManager += BotIgnoringOutdatedMessage()
 	eventManager += OnMinecraftCommandExecute()
 	eventManager += OnTelegram2Minecraft()
+	eventManager += queryManager.QueryEventListener
+	
+	queryManager += ListUsers()
 	
 	val startEpochMillis: Long = System.currentTimeMillis()
 	this.start()
