@@ -22,6 +22,8 @@ class Bot (config: BotConfig)(using logger: Logger) {
 	val eventManager: UpdateManager = UpdateManager()
 	val queryManager: InlineQueryManager = InlineQueryManager()
 	
+	val startEpochMillis: Long = System.currentTimeMillis()
+	
 	private object actionRunner extends ActionRunner
 	
 	logger `info` s"Logged in to bot successfully : bot @${bot_user.username}[${bot_user.id}]"
@@ -34,13 +36,15 @@ class Bot (config: BotConfig)(using logger: Logger) {
 		ServerLifecycleEvents.SERVER_STOPPED `register` i.ServerStopped
 	
 	eventManager += BotIgnoringOutdatedMessage()
+	
+	BotLifecycleEvents.BOT_INITIALIZING.invoker.onBotInitializing(this)
+	
 	eventManager += OnMinecraftCommandExecute()
 	eventManager += OnTelegram2Minecraft()
 	eventManager += queryManager.QueryEventListener
 	
 	queryManager += ListUsers()
 	
-	val startEpochMillis: Long = System.currentTimeMillis()
 	this.start()
 	
 	def start (): Unit = {
@@ -51,6 +55,7 @@ class Bot (config: BotConfig)(using logger: Logger) {
 	
 	def shutdown (): Unit = {
 		account.removeGetUpdatesListener()
+		BotLifecycleEvents.BOT_SHUTTING_DOWN.invoker.onBotShuttingDown(this)
 		actionRunner.setDisabled()
 		logger `info` "Stopped Telegram bot"
 	}

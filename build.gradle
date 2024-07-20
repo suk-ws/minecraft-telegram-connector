@@ -91,6 +91,9 @@ dependencies {
 	modImplementation "com.kotori316:scalable-cats-force-fabric:3.0.0:dev"
 	modImplementation "net.fabricmc:fabric-language-kotlin:1.11.0+kotlin.2.0.0"
 	
+//	modCompileOnly "carpet:fabric-carpet:1.20-1.4.112+v230608"
+	modImplementation "carpet:fabric-carpet:1.20-1.4.112+v230608"
+	
 	implementation include("com.github.pengrad:java-telegram-bot-api:7.7.0")
 	implementation include("cc.sukazyo:morny-system-lib:2.0.0-alpha20-SNAPSHOT")
 	implementation include("cc.sukazyo:da4a:0.2.0-SNAPSHOT")

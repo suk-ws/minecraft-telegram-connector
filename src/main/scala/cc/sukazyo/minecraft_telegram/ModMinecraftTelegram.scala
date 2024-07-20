@@ -2,6 +2,7 @@ package cc.sukazyo.minecraft_telegram
 
 import cc.sukazyo.minecraft_telegram.bot.{Bot, BotConfig}
 import cc.sukazyo.minecraft_telegram.config.{Config, ConfigManager}
+import cc.sukazyo.minecraft_telegram.sub_modules.carpet.CarpetExtension
 import cc.sukazyo.minecraft_telegram.utils.Log4jExtension.*
 import cc.sukazyo.restools.ResourcePackage
 import net.fabricmc.api.ModInitializer
@@ -57,6 +58,8 @@ object ModMinecraftTelegram extends ModInitializer {
 		
 		ServerLifecycleEvents.SERVER_STARTING `register` this.ServerStartingCallback
 		ServerLifecycleEvents.SERVER_STOPPING `register` this.ServerStoppingCallback
+		
+		CarpetExtension().init()
 		
 	}
 	
